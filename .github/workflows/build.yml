@@ -13,12 +13,8 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up Theos and iOS SDK
-      uses: upm-center/theos-action@v1
-      with:
-        theos-src: https://github.com
-        theos-sdk: https://github.com
-        sdk-version: 14.5
+    - name: Set up Theos and SDKs
+      uses: theos/theos-action@v1
 
     - name: Build Package
       run: |
