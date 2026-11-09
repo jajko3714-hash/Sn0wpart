@@ -16,7 +16,7 @@ jobs:
     - name: Install System Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential perl git libssl-dev fakeroot Coreutils xz-utils wget
+        sudo apt-get install -y build-essential perl git libssl-dev fakeroot coreutils xz-utils wget
 
     - name: Setup Theos Engine
       run: |
