@@ -13,32 +13,17 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up Theos Suite
-      uses: actions/checkout@v4
-      with:
-        repository: theos/theos
-        ref: master
-        path: theos
-        submodules: recursive
-
-    - name: Set up Light SDK
+    - name: Set up Theos and SDKs
       run: |
-        mkdir -p theos/sdks
-        # Fetch directly from the real Releases storage link
-        curl -L "https://github.com" -o theos/sdks/iPhoneOS14.5.sdk.tar.xz
-        tar -xf theos/sdks/iPhoneOS14.5.sdk.tar.xz -C theos/sdks/
-        rm theos/sdks/iPhoneOS14.5.sdk.tar.xz
-
-    - name: Download Precompiled Linux Toolchain
-      run: |
-        mkdir -p theos/toolchain/linux/iphone
-        curl -L "https://github.com" -o toolchain.tar.lzma
-        tar --lzma -xf toolchain.tar.lzma -C theos/toolchain/linux/iphone/ --strip-components=1
-        rm toolchain.tar.lzma
+        sudo apt-get update
+        sudo apt-get install -y build-essential perl git libssl-dev fakeroot xz-utils wget
+        # Use the official automated install installer straight from the team
+        bash -c "$(wget -qO- https://githubusercontent.com)"
+        echo "THEOS=/opt/theos" >> $GITHUB_ENV
 
     - name: Build Tweak Package
       run: |
-        export THEOS=$GITHUB_WORKSPACE/theos
+        export THEOS=/opt/theos
         make package FINALPACKAGE=1
         
     - name: Upload Finished Tweak (.deb)
