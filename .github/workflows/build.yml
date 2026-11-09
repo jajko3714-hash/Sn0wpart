@@ -24,7 +24,8 @@ jobs:
     - name: Set up Light SDK
       run: |
         mkdir -p theos/sdks
-        curl -L https://github.com -o theos/sdks/iPhoneOS14.5.sdk.tar.xz
+        # Fetch directly from the real Releases storage link
+        curl -L "https://github.com" -o theos/sdks/iPhoneOS14.5.sdk.tar.xz
         tar -xf theos/sdks/iPhoneOS14.5.sdk.tar.xz -C theos/sdks/
         rm theos/sdks/iPhoneOS14.5.sdk.tar.xz
 
