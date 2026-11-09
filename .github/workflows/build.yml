@@ -13,22 +13,15 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up Theos Environment
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential perl git libssl-dev fakeroot
-        git clone --recursive https://github.com $HOME/theos
+    - name: Set up Theos and iOS SDK
+      uses: upm-center/theos-action@v1
+      with:
+        theos-src: https://github.com
+        theos-sdk: https://github.com
+        sdk-version: 14.5
 
-    - name: Download iOS SDK
-      run: |
-        mkdir -p $HOME/theos/sdks
-        curl -L https://github.com -o $HOME/theos/sdks/iPhoneOS14.5.sdk.tar.xz
-        tar -xf $HOME/theos/sdks/iPhoneOS14.5.sdk.tar.xz -C $HOME/theos/sdks/
-        rm $HOME/theos/sdks/iPhoneOS14.5.sdk.tar.xz
-        
     - name: Build Package
       run: |
-        export THEOS=$HOME/theos
         make package FINALPACKAGE=1
         
     - name: Upload Finished Tweak (.deb)
