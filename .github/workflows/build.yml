@@ -18,17 +18,19 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential perl git libssl-dev fakeroot
         git clone --recursive https://github.com $HOME/theos
-        echo "THEOS=$HOME/theos" >> $GITHUB_ENV
 
     - name: Download iOS SDK
       run: |
-        git clone https://github.com $HOME/theos/sdks
+        mkdir -p $HOME/theos/sdks
+        curl -L https://github.com -o $HOME/theos/sdks/iPhoneOS14.5.sdk.tar.xz
+        tar -xf $HOME/theos/sdks/iPhoneOS14.5.sdk.tar.xz -C $HOME/theos/sdks/
+        rm $HOME/theos/sdks/iPhoneOS14.5.sdk.tar.xz
         
     - name: Build Package
       run: |
         export THEOS=$HOME/theos
         make package FINALPACKAGE=1
-
+        
     - name: Upload Finished Tweak (.deb)
       uses: actions/upload-artifact@v4
       with:
