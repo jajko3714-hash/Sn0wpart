@@ -13,11 +13,32 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up Theos and SDKs
-      uses: beerpiss/theos-action@v1
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential perl git libssl-dev fakeroot Coreutils xz-utils wget
+
+    - name: Setup Theos Engine
+      run: |
+        git clone --recursive https://github.com $HOME/theos
+        echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+
+    - name: Download Stable iOS SDK & Linux Toolchain
+      run: |
+        # Download and place official SDK
+        mkdir -p $HOME/theos/sdks
+        git clone https://github.com $HOME/theos/sdks-repo
+        mv $HOME/theos/sdks-repo/iPhoneOS14.5.sdk $HOME/theos/sdks/
+        
+        # Download verified, working Linux Arm64 Clang Toolchain
+        mkdir -p $HOME/theos/toolchain/linux/iphone
+        wget -q https://github.com -O $HOME/toolchain.tar.lzma
+        tar --lzma -xf $HOME/toolchain.tar.lzma -C $HOME/theos/toolchain/linux/iphone/ --strip-components=1
+        rm $HOME/toolchain.tar.lzma
 
     - name: Build Package
       run: |
+        export THEOS=$HOME/theos
         make package FINALPACKAGE=1
         
     - name: Upload Finished Tweak (.deb)
