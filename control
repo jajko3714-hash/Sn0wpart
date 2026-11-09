@@ -1,0 +1,7 @@
+Package: com.sn0wpart.sn0wpart
+Name: Sn0wpart
+Author: sn0wpart
+Version: 1.0.0
+Description: A subtle, floating snowflake particle animation overlay on the iOS Home Screen.
+Architecture: ios-arm64
+Section: Tweaks
