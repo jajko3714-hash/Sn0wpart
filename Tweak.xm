@@ -48,10 +48,14 @@
 }
 @end
 
+// Hook into SpringBoard controller
+@interface SBIconController : UIViewController
+@end
+
 %hook SBIconController
 - (void)viewDidAppear:(BOOL)animated {
     %orig;
-    UIView *mainView = [self valueForKey:@"_view"];
+    UIView *mainView = [self view];
     if (mainView && ![mainView viewWithTag:9944]) {
         Sn0wpartEmitterView *snow = [[Sn0wpartEmitterView alloc] initWithFrame:mainView.bounds];
         snow.tag = 9944;
